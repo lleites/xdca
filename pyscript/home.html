@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XCDA</title>
+  <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+</head>
+
+<body>
+  <py-inputbox id="ticker">MSFT</py-inputbox>
+  <div id="lineplot"></div>
+  <py-env>
+    - matplotlib
+  </py-env>
+
+  <py-script output="lineplot">
+    def plot():
+      import json
+
+      from pyodide.http import open_url
+      import matplotlib.pyplot as plt
+
+      ticker = Element('ticker').element.value
+      url = f"stats/{ticker or 'MSFT'}"
+
+      data = json.loads(open_url(url).getvalue())
+      print(f"{data=}")
+
+      min_avg_freq = data["min_avg_freq"]
+
+      plt.bar(min_avg_freq.keys(), min_avg_freq.values())
+
+      return plt
+
+    plot()
+  </py-script>
+  <py-button id="click" label="Click me">
+    from pyodide import create_proxy
+
+    @create_proxy
+    def on_click(evt):
+      plot()
+  </py-button>
+</body>
+
+</html>
