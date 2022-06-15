@@ -11,11 +11,17 @@
     body {
       background-color: #114976;
     }
+    .center {
+      margin:0px auto;
+    }
     .container {
-      float: center;
       width:80%;
       margin-left:10%;
       margin-right:10%;
+    }
+    .input-div {
+      float: left;
+      margin-top:10px;
     }
   </style>
 </head>
@@ -48,12 +54,12 @@
 
   </py-script>
 
-  <div class="container">
+  <div class="container center">
     <div id="lineplot"></div>
 
-    <div style="float: right;">
-      <py-label for="ticker" style="color:white">Ticker: </py-label>
-      <input type="text" id="ticker" value="TWKS" style="border-radius: 5px;"/>
+    <div class="input-div">
+      <label for="ticker" class="p-2 text-white">Ticker: </label>
+      <input type="text" id="ticker" value="TWKS" class="p-2 rounded text-blue border-white-600"/>
       <py-button id="click" label="Calculate">
         from pyodide import create_proxy
 
