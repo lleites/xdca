@@ -7,43 +7,63 @@
   <title>XCDA</title>
   <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
   <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  <style>
+    body {
+      background-color: #114976;
+    }
+    .container {
+      float: center;
+      width:80%;
+      margin-left:10%;
+      margin-right:10%;
+    }
+  </style>
 </head>
 
 <body>
-  <py-inputbox id="ticker">MSFT</py-inputbox>
-  <div id="lineplot"></div>
   <py-env>
     - matplotlib
   </py-env>
 
-  <py-script output="lineplot">
+  <py-script>
+    import json
+
+    import matplotlib.pyplot as plt
+    from pyodide.http import open_url
+
     def plot():
-      import json
-
-      from pyodide.http import open_url
-      import matplotlib.pyplot as plt
-
       ticker = Element('ticker').element.value
-      url = f"stats/{ticker or 'MSFT'}"
 
+      url = f"stats/{ticker}"
       data = json.loads(open_url(url).getvalue())
-      print(f"{data=}")
-
       min_avg_freq = data["min_avg_freq"]
 
+      plt.clf()
       plt.bar(min_avg_freq.keys(), min_avg_freq.values())
+      plt.title(ticker.upper())
 
-      return plt
+      pyscript.write("lineplot", plt)
 
     plot()
-  </py-script>
-  <py-button id="click" label="Click me">
-    from pyodide import create_proxy
 
-    @create_proxy
-    def on_click(evt):
-      plot()
-  </py-button>
+  </py-script>
+
+  <div class="container">
+    <div id="lineplot"></div>
+
+    <div style="float: right;">
+      <py-label for="ticker" style="color:white">Ticker: </py-label>
+      <input type="text" id="ticker" value="TWKS" style="border-radius: 5px;"/>
+      <py-button id="click" label="Calculate">
+        from pyodide import create_proxy
+
+        @create_proxy
+        def on_click(evt):
+          plot()
+      </py-button>
+    </div>
+  </div>
+
 </body>
 
 </html>
