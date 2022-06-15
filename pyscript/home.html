@@ -37,15 +37,25 @@
 
   <py-script>
     import json
+    import asyncio
 
     import matplotlib.pyplot as plt
-    from pyodide.http import open_url
+    from pyodide.http import pyfetch
 
-    def plot():
+    async def plot():
       ticker = Element('ticker').element.value
 
       url = f"stats/{ticker}"
-      data = json.loads(open_url(url).getvalue())
+
+      response = await pyfetch(
+        url=url,
+        method="GET",
+      )
+      if response.ok:
+        data = await response.json()
+      else:
+        raise Exception(response.status)
+
       min_avg_freq = data["min_avg_freq"]
 
       plt.clf()
@@ -66,14 +76,15 @@
       <input type="text" id="ticker" value="TWKS" class="p-2 rounded text-blue border-white-600"/>
       <py-button id="click" label="Calculate">
         from pyodide import create_proxy
+        import asyncio
 
         @create_proxy
-        def on_click(evt):
+        async def on_click(evt):
           try:
-            plot()
+            await plot()
             pyscript.write("validation-error", "")
-          except:
-            pyscript.write("validation-error", "Invalid ticker")
+          except Exception as e:
+            pyscript.write("validation-error", f"Invalid ticker {e}")
       </py-button>
       <div id="validation-error" class="p-2 validation-error" ></div>
     </div>
