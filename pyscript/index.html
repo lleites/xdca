@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>XCDA</title>
+  <title>XDCA</title>
   <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
   <link rel="stylesheet" href="main.css" />
   <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
@@ -22,9 +22,10 @@
     import matplotlib.pyplot as plt
     from pyodide.http import pyfetch
 
-    async def plot():
-      ticker = Element('ticker').element.value
+    def get_ticker() -> str:
+      return Element("ticker").element.value
 
+    async def plot(ticker: str) -> None:
       url = f"stats/{ticker}"
 
       response = await pyfetch(
@@ -44,9 +45,14 @@
 
       pyscript.write("lineplot", plt)
 
-    plot()
+    ticker = get_ticker()
+    plot(ticker)
 
   </py-script>
+
+  <div class="container center text-white">
+    Blue bar represents the number of times the day was the one with the lowest average price during a week on the last year.
+  </div>
 
   <div class="container center">
     <div id="lineplot" class="p-2 text-white">Loading ... ⌛</div>
@@ -60,11 +66,16 @@
 
         @create_proxy
         async def on_click(evt):
+          ticker = get_ticker()
+          if len(ticker) < 2:
+            pyscript.write("validation-error", "Ticker should have at least 2 digits")
+            return
+
           try:
-            await plot()
+            await plot(ticker)
             pyscript.write("validation-error", "")
           except Exception as e:
-            pyscript.write("validation-error", f"Invalid ticker")
+            pyscript.write("validation-error", "Invalid ticker")
       </py-button>
       <div id="validation-error" class="p-2 validation-error" ></div>
     </div>
