@@ -27,3 +27,14 @@ def test_main() -> None:
         )
         == expected_stats
     )
+
+
+def test_wrong_ticker() -> None:
+    assert (
+        main(
+            ticker="wrong_ticker",
+            start_date="2020-09-10",
+            end_date="2021-09-10",
+        )
+        is None
+    )

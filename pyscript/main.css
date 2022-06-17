@@ -1,0 +1,23 @@
+body {
+  background-color: #114976;
+}
+
+.center {
+  margin: 0px auto;
+}
+
+.container {
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.input-div {
+  float: left;
+  margin-top: 10px;
+}
+
+.validation-error {
+  color: red;
+  float: right;
+}

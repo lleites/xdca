@@ -1,6 +1,6 @@
 import calendar
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, Union
 
 import pandas as pd
 import pandas_datareader.data as web
@@ -15,10 +15,13 @@ class Stats:
     end_date: str
 
 
-def get_history(ticker: str, start: str, end: str) -> pd.DataFrame:
+def get_history(ticker: str, start: str, end: str) -> Union[pd.DataFrame, None]:
     print("Downloading data...")  # noqa: T201
 
-    history = web.DataReader(ticker, DATA_SOURCE, start=start, end=end)
+    try:
+        history = web.DataReader(ticker, DATA_SOURCE, start=start, end=end)
+    except Exception:
+        return None
 
     history = history[["High", "Low"]]
 
@@ -64,9 +67,12 @@ def calculate_stats(
     )
 
 
-def main(ticker: str, start_date: str, end_date: str) -> Stats:
+def main(ticker: str, start_date: str, end_date: str) -> Union[Stats, None]:
 
     history = get_history(ticker, start_date, end_date)
+
+    if history is None:
+        return None
 
     enriched_data = enrich_data(history)
 
