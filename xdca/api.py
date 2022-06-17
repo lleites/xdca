@@ -25,4 +25,4 @@ def stats(ticker: str) -> Stats:
         return stats
 
 
-app.mount("/", StaticFiles(directory="pyscript"), name="static")
+app.mount("/", StaticFiles(directory="pyscript", html=True), name="static")

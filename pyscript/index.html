@@ -55,7 +55,11 @@
   </div>
 
   <div class="container center">
-    <div id="lineplot" class="p-2 text-white">Loading ... ⌛</div>
+    <div id="lineplot" class="p-2 text-white">
+        <div id="pyscript_loading_splash" class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-600 opacity-75 flex flex-col items-center justify-center">
+          <div class="smooth spinner"></div>
+        </div>
+    </div>
 
     <div class="input-div">
       <label for="ticker" class="p-2 text-white">Ticker: </label>
