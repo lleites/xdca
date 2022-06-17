@@ -16,14 +16,14 @@ def test_main() -> None:
             "Thursday": 7,
             "Friday": 16,
         },
-        start_date="2020-09-10T000000Z",
-        end_date="2021-09-10T000000Z",
+        start_date="2020-09-10T000000Z+02:00",
+        end_date="2021-09-10T000000Z+02:00",
     )
     assert (
         main(
             ticker="MSFT",
-            start_date="2020-09-10T000000Z",
-            end_date="2021-09-10T000000Z",
+            start_date="2020-09-10T000000Z+02:00",
+            end_date="2021-09-10T000000Z+02:00",
         )
         == expected_stats
     )
