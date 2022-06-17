@@ -6,7 +6,7 @@ def test_version() -> None:
     assert __version__ == "0.1.0"
 
 
-@pytest.mark.vcr(match_on=['method', 'scheme', 'host', 'port', 'path'])
+@pytest.mark.vcr(match_on=["method", "scheme", "host", "port", "path"])
 def test_main() -> None:
     expected_stats = Stats(
         min_avg_freq={
