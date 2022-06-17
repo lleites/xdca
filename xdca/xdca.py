@@ -16,7 +16,7 @@ class Stats:
 
 
 def get_history(ticker: str, start: str, end: str) -> pd.DataFrame:
-    print("Downloading data...")
+    print("Downloading data...")  # noqa: T201
 
     history = web.DataReader(ticker, DATA_SOURCE, start=start, end=end)
 
@@ -26,7 +26,7 @@ def get_history(ticker: str, start: str, end: str) -> pd.DataFrame:
 
 
 def enrich_data(data: pd.DataFrame) -> pd.DataFrame:
-    print("Enriching data...")
+    print("Enriching data...")  # noqa: T201
 
     data["week_day"] = data.index.weekday
 
@@ -37,19 +37,31 @@ def enrich_data(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-def calculate_stats(history: pd.DataFrame, start_date: str, end_date: str) -> Stats:
-    print("Calculating stats ...")
+def calculate_stats(
+    history: pd.DataFrame, start_date: str, end_date: str
+) -> Stats:
+    print("Calculating stats ...")  # noqa: T201
 
-    min_per_week_key = history.sort_values(["week_key", "avg"], ascending=False).drop_duplicates(subset="week_key")
+    min_per_week_key = history.sort_values(
+        ["week_key", "avg"], ascending=False
+    ).drop_duplicates(subset="week_key")
 
-    grouped_by_week_day = min_per_week_key.groupby("week_day").aggregate({"avg": "count"})
+    grouped_by_week_day = min_per_week_key.groupby("week_day").aggregate(
+        {"avg": "count"}
+    )
 
-    grouped_by_week_day = grouped_by_week_day.rename(columns={"avg": "min_avg_freq"})
-    grouped_by_week_day.index = grouped_by_week_day.index.map(calendar.day_name.__getitem__)
+    grouped_by_week_day = grouped_by_week_day.rename(
+        columns={"avg": "min_avg_freq"}
+    )
+    grouped_by_week_day.index = grouped_by_week_day.index.map(
+        calendar.day_name.__getitem__
+    )
 
-    return Stats(start_date=start_date, end_date=end_date, **grouped_by_week_day.to_dict())
-
-    # min_value = grouped_by_week_day.sort_values("min_avg_freq", ascending=False).iloc[0].name
+    return Stats(
+        start_date=start_date,
+        end_date=end_date,
+        **grouped_by_week_day.to_dict(),
+    )
 
 
 def main(ticker: str, start_date: str, end_date: str) -> Stats:
@@ -65,6 +77,6 @@ def main(ticker: str, start_date: str, end_date: str) -> Stats:
 
 if __name__ == "__main__":
 
-    stats = main(ticker="MSFT", start="2020-09-10", end="2021-09-10")
+    stats = main(ticker="MSFT", start_date="2020-09-10", end_date="2021-09-10")
 
-    print(f"Stats: {stats=}")
+    print(f"Stats: {stats=}")  # noqa: T201

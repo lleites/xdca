@@ -12,7 +12,9 @@ app = FastAPI()
 def stats(ticker: str) -> Stats:
     today = date.today()
     one_year_ago = today - timedelta(days=365)
-    return main(ticker, start_date=one_year_ago.isoformat(), end_date=today.isoformat())
+    return main(
+        ticker, start_date=one_year_ago.isoformat(), end_date=today.isoformat()
+    )
 
 
 app.mount("/", StaticFiles(directory="pyscript"), name="static")
