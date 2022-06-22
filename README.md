@@ -4,7 +4,7 @@
 
 This is a simple project to showcase the current status of [PyScript](https://pyscript.net/) by building a toy fullstack Python application.
 
-It is deployed on  [Deta Cloud](https://www.deta.sh/) at <https://y8ahyh.deta.dev/>
+It is deployed on  [Deta Cloud](https://www.deta.sh/) at <https://xdca.deta.dev/>
 
 Contains a small FastAPI backend to avoid having CORS errors when calling Yahoo Finance.
 

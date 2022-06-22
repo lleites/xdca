@@ -31,13 +31,11 @@ def get_history(ticker: str, start: str, end: str) -> Union[pd.DataFrame, None]:
 def enrich_data(data: pd.DataFrame) -> pd.DataFrame:
     print("Enriching data...")  # noqa: T201
 
-    data["week_day"] = data.index.weekday
-
-    data["avg"] = (data["High"] + data["Low"]) / 2
-
-    data["week_key"] = data.index.year + data.index.isocalendar().week
-
-    return data
+    return data.assign(
+        week_day=data.index.weekday,
+        avg=(data.High + data.Low) / 2,
+        week_key=data.index.year + data.index.isocalendar().week,
+    )
 
 
 def calculate_stats(
@@ -49,13 +47,12 @@ def calculate_stats(
         ["week_key", "avg"], ascending=False
     ).drop_duplicates(subset="week_key")
 
-    grouped_by_week_day = min_per_week_key.groupby("week_day").aggregate(
-        {"avg": "count"}
+    grouped_by_week_day = (
+        min_per_week_key.groupby("week_day")
+        .aggregate({"avg": "count"})
+        .rename(columns={"avg": "min_avg_freq"})
     )
 
-    grouped_by_week_day = grouped_by_week_day.rename(
-        columns={"avg": "min_avg_freq"}
-    )
     grouped_by_week_day.index = grouped_by_week_day.index.map(
         calendar.day_name.__getitem__
     )
